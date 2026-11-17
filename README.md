@@ -8,6 +8,7 @@ npm install
 npm run dev     # local dev server
 npm test        # unit tests (Vitest)
 npm run build   # static build in dist/
+npm run build:artifact  # single-file shareable page in dist-artifact/
 ```
 
 The app has two views: **Incident Commander** (default) and **Security Framework** (`#framework`, the original `physical-security-cascade.jsx`).
@@ -24,6 +25,10 @@ Built from *EIT Incident Response Pack v1* (Parts B and C). It walks the Site In
 6. **Log.** Every tick and decision is timestamped. **Export report** downloads a Markdown handover or post-incident report.
 
 State is kept in the browser's local storage, so a refresh doesn't lose it. The exported report is the record. Closed incidents are archived in the same browser.
+
+### Shareable page
+
+`npm run build:artifact` builds a single HTML page (Incident Commander only) that loads React from cdnjs. It's the page published as a claude.ai artifact. That page can't download files, so **Export report** shows the report with a Copy button instead. It follows the viewer's light or dark theme, and **Load a training example** opens a fictional incident, 22 minutes in.
 
 ### Keeping it current
 

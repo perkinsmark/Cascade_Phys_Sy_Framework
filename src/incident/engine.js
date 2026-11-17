@@ -186,3 +186,43 @@ export function toMarkdown(incident, now) {
   }
   return lines.join("\n") + "\n";
 }
+
+// A fictional incident, 22 minutes in, for training and demonstration. Clearly labelled as an example.
+export function exampleIncident(now) {
+  const t0 = new Date(new Date(now).getTime() - 22 * 60000);
+  const at = m => new Date(t0.getTime() + m * 60000).toISOString();
+  const lead = "Duty Responder (example)";
+  let inc = newIncident(t0, {
+    title: "EXAMPLE: Fire in a lab building",
+    location: "Building 2, level 1 (training example)",
+    lead, reportedBy: "Fire alarm, then SCR call",
+  });
+  inc = {
+    ...inc,
+    id: "INC-EXAMPLE",
+    answers: { outOfUse: true },
+    triggers: ["fire"],
+    pLevel: "P2", pLevelConfirmedAt: at(14), confirmedBy: "Crisis Co-ordinator (example)",
+    cardIds: ["card4"],
+    checklist: { "safe-999": { at: at(1) }, "safe-account": { at: at(9) }, "safe-meet": { at: at(11) }, "cls-what": { at: at(16) } },
+    actions: {
+      [actionKey("card4", "secure", 0)]: { doneAt: at(2), owner: "SCR" },
+      [actionKey("card4", "secure", 1)]: { doneAt: at(12), owner: "Fire wardens" },
+      [actionKey("card4", "secure", 2)]: { owner: "Site Incident Lead" },
+    },
+  };
+  const steps = [
+    [1, "checklist", "Done: SCR has called 999 if needed; Part A actions under way"],
+    [2, "action", "Done (Card 4, Secure): Confirm the alarm is raised and 999 called."],
+    [9, "checklist", "Done: Everyone accounted for: wardens' reports, visitor sign-in and access control roll call"],
+    [11, "checklist", "Done: Someone named to meet the emergency services, with site plans and the lab hazard summary"],
+    [12, "action", "Done (Card 4, Secure): Evacuate and account for everyone; report anyone missing or in a refuge to the fire service."],
+    [13, "decision", "Provisional P-level set to P2 Major (P2: Is a building or service out of use, or are multiple teams affected?)"],
+    [13, "decision", "Opened Card 4: Fire, explosion or structural damage"],
+    [14, "decision", "P2 confirmed by Crisis Co-ordinator (example)"],
+    [16, "checklist", "Done: What happened, where, and what is affected (people, buildings, labs, systems)"],
+    [18, "note", "Fire service on scene. Two staff were in the level 1 refuge and have been brought out; nobody injured."],
+  ];
+  for (const [m, type, text] of steps) inc = addLog(inc, at(m), type, text, lead);
+  return inc;
+}

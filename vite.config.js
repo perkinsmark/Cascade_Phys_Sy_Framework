@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  define: { __ARTIFACT__: "false" },
   base: "./",
   test: { environment: "node", include: ["test/**/*.test.js"] },
 });

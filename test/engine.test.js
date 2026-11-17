@@ -120,3 +120,18 @@ describe("report", () => {
     expect(FIRST_HOUR.flatMap(b => b.items).every(i => md.includes(i.text))).toBe(true);
   });
 });
+
+import { exampleIncident } from "../src/incident/engine.js";
+describe("training example", () => {
+  it("is labelled, 22 minutes in, at P2 with Card 4 open", () => {
+    const inc = exampleIncident(at(60));
+    expect(inc.title.startsWith("EXAMPLE")).toBe(true);
+    expect(elapsedMinutes(inc.declaredAt, at(60))).toBe(22);
+    expect(inc.pLevel).toBe("P2");
+    expect(inc.cardIds).toEqual(["card4"]);
+    const bands = checklistProgress(inc, at(60));
+    expect(bands[0].state).toBe("overdue");   // 3 of 4 done after 15 minutes
+    expect(bands[1].state).toBe("done");
+    expect(toMarkdown(inc, at(60))).toContain("INC-EXAMPLE");
+  });
+});
