@@ -1,0 +1,58 @@
+/* Incident Commander theme. Layout: one working column, status bar on top, tabbed steps below.
+   Neutrals lean slate-blue; P-levels and time states carry the only strong colour. */
+:root {
+  --bg: #F4F6F9; --surface: #FFFFFF; --sunken: #EEF2F6; --field: #FFFFFF;
+  --fg: #0F1A2A; --muted: #5A6B80; --muted-strong: #3E4D60; --faint: #8A98AA;
+  --line: #DCE3EB; --line-soft: #EDF1F5; --field-line: #C3CEDA;
+  --ink: #16263B; --ink-fg: #FFFFFF; --focus: #2F6FEB;
+  --p1-bg: #FDE3E1; --p1-fg: #9B1C14; --p1-bd: #EE7A70;
+  --p2-bg: #FFEBD6; --p2-fg: #94400B; --p2-bd: #F49A4C;
+  --p3-bg: #FDF4C9; --p3-fg: #7A5300; --p3-bd: #E3BC2E;
+  --p4-bg: #DDF5E4; --p4-fg: #17663A; --p4-bd: #5CC983;
+  --done-bg: #DDF5E4; --done-fg: #17663A; --done-bd: #9EDDB3;
+  --late-bg: #FDE3E1; --late-fg: #9B1C14; --late-bd: #EE9A92; --late-tint: #FEF3F2;
+  --now-bg: #DEEAFD; --now-fg: #1D4FB8; --now-bd: #9DBDF5;
+  --idle-bg: #EDF1F5; --idle-fg: #4A5A6E; --idle-bd: #C3CEDA;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C131D; --surface: #141E2B; --sunken: #101925; --field: #0F1824;
+    --fg: #E6ECF3; --muted: #93A3B6; --muted-strong: #B4C1D0; --faint: #6D7D90;
+    --line: #26344A; --line-soft: #1C2839; --field-line: #34455E;
+    --ink: #DCE6F2; --ink-fg: #0C131D; --focus: #6EA0FF;
+    --p1-bg: #3A1514; --p1-fg: #FFB2AA; --p1-bd: #C9483E;
+    --p2-bg: #3A2210; --p2-fg: #FFC48F; --p2-bd: #D3792F;
+    --p3-bg: #352B0C; --p3-fg: #F5D774; --p3-bd: #B8951F;
+    --p4-bg: #12301E; --p4-fg: #96E3B1; --p4-bd: #3F9E62;
+    --done-bg: #12301E; --done-fg: #96E3B1; --done-bd: #2F6E47;
+    --late-bg: #3A1514; --late-fg: #FFB2AA; --late-bd: #8E3530; --late-tint: #24151A;
+    --now-bg: #14284A; --now-fg: #A9C6FF; --now-bd: #345A99;
+    --idle-bg: #1C2839; --idle-fg: #A3B2C4; --idle-bd: #34455E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C131D; --surface: #141E2B; --sunken: #101925; --field: #0F1824;
+  --fg: #E6ECF3; --muted: #93A3B6; --muted-strong: #B4C1D0; --faint: #6D7D90;
+  --line: #26344A; --line-soft: #1C2839; --field-line: #34455E;
+  --ink: #DCE6F2; --ink-fg: #0C131D; --focus: #6EA0FF;
+  --p1-bg: #3A1514; --p1-fg: #FFB2AA; --p1-bd: #C9483E;
+  --p2-bg: #3A2210; --p2-fg: #FFC48F; --p2-bd: #D3792F;
+  --p3-bg: #352B0C; --p3-fg: #F5D774; --p3-bd: #B8951F;
+  --p4-bg: #12301E; --p4-fg: #96E3B1; --p4-bd: #3F9E62;
+  --done-bg: #12301E; --done-fg: #96E3B1; --done-bd: #2F6E47;
+  --late-bg: #3A1514; --late-fg: #FFB2AA; --late-bd: #8E3530; --late-tint: #24151A;
+  --now-bg: #14284A; --now-fg: #A9C6FF; --now-bd: #345A99;
+  --idle-bg: #1C2839; --idle-fg: #A3B2C4; --idle-bd: #34455E;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); }
+.ic-root h2, .ic-root h3 { font-family: var(--display); letter-spacing: -0.01em; text-wrap: balance; }
+.ic-root button:focus-visible, .ic-root input:focus-visible, .ic-root select:focus-visible, .ic-root textarea:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
+.ic-root .clock { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

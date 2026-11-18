@@ -1,39 +1,10 @@
-// Content transcribed from "EIT Incident Response Pack v1" (Parts B and C).
+// EIT pack: content transcribed from "EIT Incident Response Pack v1" (Parts B and C).
 // Keep this file in step with the pack: change the pack first, then this file.
 // Values in [square brackets] are completed by the building lead.
+// The pack format is documented in src/incident/packs/README.md.
 
-export const PACK_VERSION = "EIT Incident Response Pack v1";
 
-// ── Part B, Section 1: Priority levels ───────────────────────────────
-export const P_LEVELS = {
-  P1: {
-    name: "Critical",
-    looksLike: "Threat to life, serious injury, site-wide loss, or major reputational or regulatory exposure",
-    activated: "IRT and CMT at once; CEO notified",
-    howFast: "Minutes",
-  },
-  P2: {
-    name: "Major",
-    looksLike: "Building or service out of use, multiple teams affected, recovery beyond normal capability",
-    activated: "IRT activated; CMT convenes within 2 hours",
-    howFast: "1 to 2 hours",
-  },
-  P3: {
-    name: "Significant",
-    looksLike: "Disruption to one team or area that needs coordination beyond the line manager",
-    activated: "Site Incident Lead manages; Crisis Co-ordinator informed; CMT on standby",
-    howFast: "Same day",
-  },
-  P4: {
-    name: "Minor",
-    looksLike: "Handled in normal operations, but could escalate",
-    activated: "Line manager or Security handles; logged",
-    howFast: "Routine",
-  },
-};
-export const P_ORDER = ["P1", "P2", "P3", "P4"];
-
-export const REASSESS_TRIGGERS = [
+const REASSESS_TRIGGERS = [
   { id: "casualties", label: "Casualties" },
   { id: "media", label: "Media interest" },
   { id: "regulatory", label: "Regulatory duties" },
@@ -42,7 +13,7 @@ export const REASSESS_TRIGGERS = [
 
 // Triage questions. Each "yes" points to the P-level it implies (Section 1).
 // The recommendation is the highest level any "yes" implies: when in doubt, classify higher.
-export const TRIAGE_QUESTIONS = [
+const TRIAGE_QUESTIONS = [
   { id: "life", text: "Is anyone's life at risk, or is there a serious injury, fatality or multiple casualties?", level: "P1" },
   { id: "attack", text: "Is there a hostile attack, weapons, or a credible bomb threat?", level: "P1" },
   { id: "siteLoss", text: "Is a whole building lost, or is the site-wide operation affected?", level: "P1" },
@@ -53,14 +24,14 @@ export const TRIAGE_QUESTIONS = [
 ];
 
 // ── Part B, Section 2: Roles ─────────────────────────────────────────
-export const ROLES = [
+const ROLES = [
   { role: "Site Incident Lead", who: "Duty Responder on shift; [named building lead] once on scene", handsOver: "IRT at P2 or above" },
   { role: "Incident Response Team (IRT)", who: "Site Incident Lead plus Security, Facilities, EHS, HR and IT as needed", handsOver: "CMT for strategic decisions" },
   { role: "Crisis Management Team (CMT)", who: "Chaired by the SLT Sponsor; COO, Communications, Legal, HR; Crisis Co-ordinator as secretary", handsOver: "Normal management when stood down" },
 ];
 
 // ── Part B, Section 3: First-hour checklist ──────────────────────────
-export const FIRST_HOUR = [
+const FIRST_HOUR = [
   {
     id: "safe", label: "Make people safe", fromMin: 0, toMin: 15,
     items: [
@@ -83,7 +54,7 @@ export const FIRST_HOUR = [
     id: "activate", label: "Activate and inform", fromMin: 30, toMin: 60,
     items: [
       { id: "act-irt", text: "IRT called in at P3 or above; CMT alerted at P2 or above" },
-      { id: "act-holding", text: "Holding message to staff on site (Section 4)", auto: "holding" },
+      { id: "act-holding", text: "Holding message to staff on site (Section 4)", auto: "sent:holding" },
       { id: "act-cordons", text: "Cordons, access and building status confirmed with Security" },
       { id: "act-update", text: "Time set for the first IRT or CMT update", auto: "nextUpdate" },
       { id: "act-log", text: "Log started and kept: decisions, actions, times, who", auto: "log" },
@@ -93,22 +64,19 @@ export const FIRST_HOUR = [
 
 // ── Part B, Section 4: Escalation and communications ─────────────────
 // dueMin: minutes after declaration by P-level; null = event-driven.
-export const COMMS = [
+const COMMS = [
   { id: "staff", audience: "Staff on site", channel: "Mass notification, wardens, line managers", owner: "Site Incident Lead", when: "Within 60 minutes, then at each change", dueMin: { P1: 60, P2: 60, P3: 60, P4: 60 } },
   { id: "slt", audience: "SLT and Board", channel: "Direct call, then scheduled briefings", owner: "CMT chair", when: "P1 at once; P2 within 2 hours", dueMin: { P1: 0, P2: 120 } },
   { id: "services", audience: "Emergency services", channel: "In person on arrival", owner: "Site Incident Lead", when: "On arrival", dueMin: null },
   { id: "regulators", audience: "Regulators (HSE, police and others)", channel: "As required by law", owner: "EHS lead with Legal", when: "See the reference annex", dueMin: null },
-  { id: "partners", audience: "Partners, tenants and visitors' organisations", channel: "Approved statement", owner: "Communications", when: "When the CMT approves", dueMin: null, cmtApproval: true },
-  { id: "media", audience: "Media", channel: "Designated spokesperson only", owner: "Communications", when: "When the CMT approves; everyone else refers enquiries", dueMin: null, cmtApproval: true },
+  { id: "partners", audience: "Partners, tenants and visitors' organisations", channel: "Approved statement", owner: "Communications", when: "When the CMT approves", dueMin: null, approval: "CMT approval required" },
+  { id: "media", audience: "Media", channel: "Designated spokesperson only", owner: "Communications", when: "When the CMT approves; everyone else refers enquiries", dueMin: null, approval: "CMT approval required" },
 ];
 
-export const HOLDING_MESSAGE =
-  "There is an incident at {building} affecting {area}. Please {instruction} {location} and follow instructions from wardens and Security. We will update you by {time}. Do not post about this on social media.";
-export const HOLDING_INSTRUCTIONS = ["stay away from", "leave", "remain in"];
 
 // ── Part B, Section 5: Key contacts ──────────────────────────────────
 // Fill name, phone, deputy and verified (YYYY-MM-DD) per site. Blank fields show as gaps.
-export const CONTACTS = [
+const CONTACTS = [
   { role: "Emergency services", name: "999", phone: "999", deputy: "", verified: "", fixed: true },
   { role: "Security Control Room", name: "", phone: "", deputy: "", verified: "" },
   { role: "Duty Responder", name: "", phone: "", deputy: "", verified: "" },
@@ -126,7 +94,7 @@ export const CONTACTS = [
 ];
 
 // ── Part C: Scenario cards ───────────────────────────────────────────
-export const STAGES = [
+const STAGES = [
   { id: "secure", label: "Secure", fromH: 0, toH: 1 },
   { id: "activate", label: "Activate", fromH: 1, toH: 4 },
   { id: "stabilise", label: "Stabilise", fromH: 4, toH: 24 },
@@ -134,7 +102,7 @@ export const STAGES = [
 ];
 
 // Scenario triggers offered at triage; each maps to the card whose "Triggers" line names it.
-export const SCENARIO_TRIGGERS = [
+const SCENARIO_TRIGGERS = [
   { id: "ambulance", label: "Someone needs an ambulance", card: "card1" },
   { id: "labExposure", label: "Lab exposure", card: "card1" },
   { id: "multiCasualty", label: "Multiple casualties", card: "card1" },
@@ -154,7 +122,7 @@ export const SCENARIO_TRIGGERS = [
   { id: "flood", label: "Major flood damage", card: "card4" },
 ];
 
-export const CARDS = [
+const CARDS = [
   {
     id: "card1", number: 1, name: "Serious injury or medical emergency",
     lead: "Site Incident Lead",
@@ -286,3 +254,88 @@ export const CARDS = [
     bcp: "Invoke the Denial of Access BCP when the building is unusable for more than [24] hours.",
   },
 ];
+
+const LEVELS = [
+  { id: "P1", short: "P1", name: "Critical",
+    looksLike: "Threat to life, serious injury, site-wide loss, or major reputational or regulatory exposure",
+    activated: "IRT and CMT at once; CEO notified", howFast: "Minutes" },
+  { id: "P2", short: "P2", name: "Major",
+    looksLike: "Building or service out of use, multiple teams affected, recovery beyond normal capability",
+    activated: "IRT activated; CMT convenes within 2 hours", howFast: "1 to 2 hours" },
+  { id: "P3", short: "P3", name: "Significant",
+    looksLike: "Disruption to one team or area that needs coordination beyond the line manager",
+    activated: "Site Incident Lead manages; Crisis Co-ordinator informed; CMT on standby", howFast: "Same day" },
+  { id: "P4", short: "P4", name: "Minor",
+    looksLike: "Handled in normal operations, but could escalate",
+    activated: "Line manager or Security handles; logged", howFast: "Routine" },
+];
+
+const MESSAGES = [
+  {
+    id: "holding", title: "Holding message to staff", commsRow: "staff",
+    note: "The Site Incident Lead may send this without CMT approval.",
+    template: "There is an incident at {building} affecting {area}. Please {instruction} {location} and follow instructions from wardens and Security. We will update you by {time}. Do not post about this on social media.",
+    fields: [
+      { key: "building", label: "building", prefill: "location" },
+      { key: "area", label: "area/service" },
+      { key: "instruction", label: "stay away from / leave / remain in", options: ["stay away from", "leave", "remain in"] },
+      { key: "location", label: "location" },
+      { key: "time", label: "time" },
+    ],
+  },
+];
+
+const EXAMPLE = {
+  blurb: "The training example is a fictional fire in a lab building, 22 minutes in, so you can see each screen part-way through.",
+  ageMin: 22,
+  title: "EXAMPLE: Fire in a lab building",
+  location: "Building 2, level 1 (training example)",
+  lead: "Duty Responder (example)",
+  reportedBy: "Fire alarm, then SCR call",
+  answers: { outOfUse: true }, triggers: ["fire"],
+  level: "P2", confirmedBy: "Crisis Co-ordinator (example)", confirmAt: 14,
+  cardIds: ["card4"],
+  checklist: { "safe-999": 1, "safe-account": 9, "safe-meet": 11, "cls-what": 16 },
+  actions: [["card4", "secure", 0, 2, "SCR"], ["card4", "secure", 1, 12, "Fire wardens"], ["card4", "secure", 2, null, "Site Incident Lead"]],
+  sent: {},
+  log: [
+    [1, "checklist", "Done: SCR has called 999 if needed; Part A actions under way"],
+    [2, "action", "Done (Card 4, Secure): Confirm the alarm is raised and 999 called."],
+    [9, "checklist", "Done: Everyone accounted for: wardens' reports, visitor sign-in and access control roll call"],
+    [11, "checklist", "Done: Someone named to meet the emergency services, with site plans and the lab hazard summary"],
+    [12, "action", "Done (Card 4, Secure): Evacuate and account for everyone; report anyone missing or in a refuge to the fire service."],
+    [13, "decision", "Provisional P-level set to P2 Major (P2: Is a building or service out of use, or are multiple teams affected?)"],
+    [13, "decision", "Opened Card 4: Fire, explosion or structural damage"],
+    [14, "decision", "P2 confirmed by Crisis Co-ordinator (example)"],
+    [16, "checklist", "Done: What happened, where, and what is affected (people, buildings, labs, systems)"],
+    [18, "note", "Fire service on scene. Two staff were in the level 1 refuge and have been brought out; nobody injured."],
+  ],
+};
+
+export default {
+  id: "eit",
+  storageKey: "ic",                 // keeps state saved by earlier versions of the EIT page
+  appTitle: "Incident Commander",
+  subtitle: "The first hours of a physical security incident, from the EIT Incident Response Pack v1.",
+  source: "EIT Incident Response Pack v1",
+  classification: "",
+  terms: {
+    level: "P-level", lead: "Site Incident Lead", confirmer: "Crisis Co-ordinator",
+    confirmVerb: "confirms", confirmedWord: "CONFIRMED", updateTo: "IRT or CMT", bcpTo: "CMT",
+  },
+  levels: LEVELS,
+  reassessNote: "Also re-assess the P-level at every IRT meeting.",
+  triage: TRIAGE_QUESTIONS,
+  alert: null,
+  reassess: REASSESS_TRIGGERS,
+  roles: ROLES,
+  firstHour: FIRST_HOUR,
+  commsRule: "Only the CMT approves anything said outside EIT. The holding message may go to staff without approval.",
+  comms: COMMS,
+  messages: MESSAGES,
+  contacts: CONTACTS,
+  stages: STAGES,
+  triggers: SCENARIO_TRIGGERS,
+  cards: CARDS,
+  example: EXAMPLE,
+};
