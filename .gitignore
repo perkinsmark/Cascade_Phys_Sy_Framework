@@ -2,4 +2,4 @@ node_modules/
 dist/
 dist-artifact/
 # Packs with confidential content: never commit to this public repo
-private-packs/
+private-packs

@@ -5,7 +5,8 @@ import { packFile } from "./pack.config.js";
 
 export default defineConfig({
   define: { __ARTIFACT__: "true", "process.env.NODE_ENV": '"production"' },
-  resolve: { alias: { "@pack": packFile } },
+  // preserveSymlinks: private-packs/ may be a link to a separately cloned private repo.
+  resolve: { alias: { "@pack": packFile }, preserveSymlinks: true },
   esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment" },
   build: {
     outDir: "dist-artifact/build",
