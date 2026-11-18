@@ -1,10 +1,12 @@
 // Builds src/artifact.jsx as one IIFE that expects React and ReactDOM as globals,
 // so the published page loads React from cdnjs instead of inlining it.
 import { defineConfig } from "vite";
+import { packFile } from "./pack.config.js";
 
 export default defineConfig({
   define: { __ARTIFACT__: "true", "process.env.NODE_ENV": '"production"' },
-  esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment", jsxInject: "" },
+  resolve: { alias: { "@pack": packFile } },
+  esbuild: { jsx: "transform", jsxFactory: "React.createElement", jsxFragment: "React.Fragment" },
   build: {
     outDir: "dist-artifact/build",
     emptyOutDir: true,
